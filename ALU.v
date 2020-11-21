@@ -1,11 +1,11 @@
-// Univeridad del Valle de Guatemala
+ // Univeridad del Valle de Guatemala
 // Proyecto final, Procesador
 // Estephan Portales
 // 19826
 
 
 module Alu(input [3:0] A, B,
-           input [2:0] F,
+           input [3:0] F,
            output C, Z,
            output [3:0] S);
 

@@ -1,56 +1,68 @@
-module  decode(clock,reset,pushbuttons,phase,c_flag,z_flag
-               instr,oprnd,accu,data_bus,FF_out,program_byte,PC,address_RAM);
-// LLamo a todos los módulos
+module  decode(/* Entradas*/
+               C_flag,
+               Z_flag,
+               Phase,
+               Instr,
+               /*Salidas*/
+               IncPC,
+               LoadPC,
+               LoadA,
+               LoadFlags,
+               S,
+               CsRAM,
+               WeRAM,
+               OeALU,
+               OeIN,
+               OeOprnd,
+               LoadOut
+               );
 
-// entradas reg
+input wire C_flag,Z_flag,Phase;
+input wire [3:0] Instr;
 
-reg clock, reset;
-reg [3:0] pushbuttons;
-wire phase, c_flag, z_flag;
-wire [3:0] instr, oprnd, accu, data_bus, FF_out;
-wire [7:0] program_byte;
-wire [11:0] PC, address_RAM;
+output wire IncPC,LoadPC,LoadA,LoadFlags,CsRAM,WeRAM,OeALU,OeIN,OeOprnd,LoadOut;
+output wire [2:0] S;
+wire [6:0] Entradas;
+reg [12:0] Salidas;
 
-//NO declarados
-output wire IncPC,LoadPC,LoadA,LoadFlags,S2,S1,S0,csRAM,WeRAM,oeALU,oeIN,oeOprnd,LoadOut;
-///////////////////////////////////////
+assign Entradas = {Instr,C_flag,Z_flag,Phase};
 
+always @(Entradas)
+casez(Entradas)
+7'b??????0: Salidas <= 13'b1000000001000;//any
+7'b00001?1: Salidas <= 13'b0100000001000;//JC
+7'b00000?1: Salidas <= 13'b1000000001000;//JC
+7'b00011?1: Salidas <= 13'b1000000001000;//JNC
+7'b00010?1: Salidas <= 13'b0100000001000;//JNC
+7'b0010??1: Salidas <= 13'b0001001000010;//CMPI
+7'b0011??1: Salidas <= 13'b1001001100000;//CMPM
+7'b0100??1: Salidas <= 13'b0011010000010;//LIT
+7'b0101??1: Salidas <= 13'b0011010000100;//IN
+7'b0110??1: Salidas <= 13'b1011010100000;//LD
+7'b0111??1: Salidas <= 13'b1000000111000;//ST
+7'b1000?11: Salidas <= 13'b0100000001000;//JZ
+7'b1000?01: Salidas <= 13'b1000000001000;//JZ
+7'b1001?11: Salidas <= 13'b1000000001000;//JNZ
+7'b1001?01: Salidas <= 13'b0100000001000;//JNZ
+7'b1010??1: Salidas <= 13'b0011011000010;//ADDI
+7'b1011??1: Salidas <= 13'b1011011100000;//ADDM
+7'b1100??1: Salidas <= 13'b0100000001000;//JMP
+7'b1101??1: Salidas <= 13'b0000000001001;//OUT
+7'b1110??1: Salidas <= 13'b0011100000010;//NANI
+7'b1111??1: Salidas <= 13'b1011100100000;//NANDM
+default: Salidas <= 13'b0000000000000;
+endcase
 
-//salidas wire
-
-//Revisar
-/*
-enableds de
-- Program_counter
--Fetch
-- C,Z
-- bus drivers
-*/
-Instruccion = {S2,S1,S0}
-
-Program_counter m1(clock,reset,IncPC,loadPC,address_RAM,PC);
-Rom  m2(PC,program_byte);
-Fetch m3(clock,reset,LoadA,program_byte,instr,oprnd);//verificar código, supongo que el fetch es LoadA
-Flags m4(clock,reset,LoadFlags,C,Z,c_flag,z_flag);
-//phase m5
-Bus_driver1 m6(enabled_Bus_driver1,oprnd,data_bus);//enabled
-//RAM m7
-Outputs m8(clock,reset,LoadOut,data_bus,FF_out);
-Accumator m9(clock,reset,enabled_Accumulator,Salida_ALU,accu);// salida de la alu
-Alu m10(data_bus,accu,Instruccion,C,Z,Salida_ALU);//cantidad de bits de entrada 3 o 4? e Instruccion
-Bus_driver2 m11(enabled_Bus_driver2,Salida_ALU,data_bus);
-Inputs m12(enabled_Inputs,pushbuttons,data_bus);
-
-always @(posedge clock, posedge reset);
-  initial begin
-      case()
-        begin
-      endcase
-  end
-
-
-
-
-
+assign  IncPC =  Salidas[12];
+assign  LoadPC =  Salidas[11];
+assign  LoadA =  Salidas[10];
+assign  LoadFlags =  Salidas[9];
+assign  S =  Salidas[8:6];
+assign  CsRAM =  Salidas[5];
+assign  WeRAM =  Salidas[4];
+assign  OeALU =  Salidas[3];
+assign  OeIN =  Salidas[2];
+assign  OeOprnd =  Salidas[1];
+assign  LoadOut=  Salidas[0];
 
 endmodule
