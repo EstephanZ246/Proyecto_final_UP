@@ -1,0 +1,34 @@
+[*]
+[*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
+[*] Sat Nov 21 12:38:43 2020
+[*]
+[dumpfile] "/home/z9/Documents/GitHub/Proyecto_final_UP/uP_tb.vcd"
+[dumpfile_mtime] "Sat Nov 21 12:30:52 2020"
+[dumpfile_size] 13400
+[savefile] "/home/z9/Documents/GitHub/Proyecto_final_UP/uP_tb.gtkw"
+[timestart] 41
+[size] 1920 1029
+[pos] -461 -215
+*-7.000000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 212
+[signals_width] 166
+[sst_expanded] 1
+[sst_vpaned_height] 298
+@28
+testbench.clock
+testbench.phase
+@22
+testbench.PC[11:0]
+testbench.program_byte[7:0]
+testbench.FF_out[3:0]
+testbench.instr[3:0]
+testbench.oprnd[3:0]
+@28
+testbench.c_flag
+testbench.z_flag
+@22
+testbench.data_bus[3:0]
+@23
+testbench.accu[3:0]
+[pattern_trace] 1
+[pattern_trace] 0
