@@ -27,8 +27,9 @@ reg [12:0] Salidas;
 
 assign Entradas = {Instr,C_flag,Z_flag,Phase};
 
-always @(Entradas)
+always @(Instr or C_flag or Z_flag or Phase)
 casez(Entradas)
+
 7'b??????0: Salidas <= 13'b1000000001000;//any
 7'b00001?1: Salidas <= 13'b0100000001000;//JC
 7'b00000?1: Salidas <= 13'b1000000001000;//JC
@@ -50,7 +51,11 @@ casez(Entradas)
 7'b1101??1: Salidas <= 13'b0000000001001;//OUT
 7'b1110??1: Salidas <= 13'b0011100000010;//NANI
 7'b1111??1: Salidas <= 13'b1011100100000;//NANDM
-default: Salidas <= 13'b0000000000000;
+//default: Salidas <= 13'b0000000000000;
+
+
+
+
 endcase
 
 assign  IncPC =  Salidas[12];
