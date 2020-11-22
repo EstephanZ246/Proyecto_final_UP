@@ -1,24 +1,21 @@
-/*module Fetch(input clk, reset, enabled, input [7:0] D, output reg[3:0]Q1,Q2);
+// Univeridad del Valle de Guatemala
+// Proyecto final, Procesador
+// Estephan Portales
+// 19826
 
-    always @ (posedge clk, posedge reset)
-    begin
-        if (reset)
-            Q1 <= 4'b0000;
-        //   Q2 <= 4'b0000;
-        else if (enabled)
-            Q1 <= D[7:4];
-          //  Q2 <= D[3:0];
-    end
-endmodule
-*/
 
-module Fetch(input wire clk,
-             input wire reset,
-             input wire enable,
-             input wire [7:0] D,
-             output wire [3:0] instr,
-             output wire [3:0] oprnd);
+// Este es un flip-flop tipo D, pero la salida la dividimos es el operand e instructions
 
+// Declaramos entradas y salidas
+module Fetch(clk,reset,enable, D,instr,oprnd);
+// Configuramos los puertos
+input wire clk;
+input wire reset;
+input wire enable;
+input wire [7:0] D;
+output wire [3:0] instr;
+output wire [3:0] oprnd;
+// INSTANCIAS para el flip-flop tipo D
   FFD1 U1(clk, reset, enable, D[7], instr[3]);
   FFD1 U2(clk, reset, enable, D[6], instr[2]);
   FFD1 U3(clk, reset, enable, D[5], instr[1]);
@@ -30,12 +27,15 @@ module Fetch(input wire clk,
   FFD1 U8(clk, reset, enable, D[0], oprnd[0]);
 
 endmodule
-module FFD1(input wire clk,
-           input wire reset,
-           input wire enable,
-           input wire D,
-           output reg Q);
-
+//Un flip flop tipo D para complementar el Fetch
+module FFD1(clk,reset,enable,D,Q);
+// Configuramos los puertos
+input wire clk;
+input wire reset;
+input wire enable;
+input wire D;
+output reg Q;
+// Salida según el valor de reloj y un reset para volver el valor de salida 0
   always @(posedge clk or posedge reset)
     begin
       if (reset) Q <= 1'b0;

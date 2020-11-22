@@ -1,3 +1,8 @@
+// Univeridad del Valle de Guatemala
+// Proyecto final, Procesador
+// Estephan Portales
+// 19826
+
 module  decode(/* Entradas*/
                C_flag,
                Z_flag,
@@ -16,7 +21,7 @@ module  decode(/* Entradas*/
                OeOprnd,
                LoadOut
                );
-
+// configuración de las entradas y salidas
 input wire C_flag,Z_flag,Phase;
 input wire [3:0] Instr;
 
@@ -24,12 +29,12 @@ output wire IncPC,LoadPC,LoadA,LoadFlags,CsRAM,WeRAM,OeALU,OeIN,OeOprnd,LoadOut;
 output wire [2:0] S;
 wire [6:0] Entradas;
 reg [12:0] Salidas;
-
+// Concatenamos los valores para poder hacer la entrada a el decode juntando C, Z, Phase y la Instruccion(Instr)
 assign Entradas = {Instr,C_flag,Z_flag,Phase};
-
+// Si Activarse con alguno de los valores de las entradas
 always @(Instr or C_flag or Z_flag or Phase)
 casez(Entradas)
-
+// Todas la instrucciones que se presentan en la tabla, la entrada e es de 7 bits y la salida es de 13 bits, las activan todos lo módulos
 7'b??????0: Salidas <= 13'b1000000001000;//any
 7'b00001?1: Salidas <= 13'b0100000001000;//JC
 7'b00000?1: Salidas <= 13'b1000000001000;//JC
@@ -51,13 +56,13 @@ casez(Entradas)
 7'b1101??1: Salidas <= 13'b0000000001001;//OUT
 7'b1110??1: Salidas <= 13'b0011100000010;//NANI
 7'b1111??1: Salidas <= 13'b1011100100000;//NANDM
-//default: Salidas <= 13'b0000000000000;
+default: Salidas <= 13'b0000000000000;// Desactivo todo  (aunque quizás no llegué a pasar)
 
 
 
 
 endcase
-
+// Asignamos a capa salida un bit de la variable "Salidas" según el orden de la tabla
 assign  IncPC =  Salidas[12];
 assign  LoadPC =  Salidas[11];
 assign  LoadA =  Salidas[10];
